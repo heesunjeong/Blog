@@ -1,0 +1,43 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<script>
+	$(document).ready(function() {
+		postLinkViewList(1);
+		writeComment();
+
+		deletePost();
+	});
+</script>
+</head>
+<body>
+
+
+	<div id="postArea">
+		<div id="blogPost">
+			<div id="postHeader">
+				<input type="hidden" id="board_id" /> <input type="hidden"
+					id="comment_id" />
+				<div id="postTitle"></div>
+				<p>
+				<div id="postDate"></div>
+			</div>
+			<p>
+			<div id="postContent"></div>
+			<div id="postControlArea" align="center"></div>
+
+		</div>
+
+		<div id="blogComments">
+			<div id="commentList"></div>
+			<div id="writeCommentForm"></div>
+
+		</div>
+		<div id="postListView">
+			<div id="postList" class="blogBody"></div>
+			<div id="postListPage"></div>
+		</div>
+
+	</div>
+</body>
+</html>

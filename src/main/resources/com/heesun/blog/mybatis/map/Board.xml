@@ -1,0 +1,176 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heesun.blog.mapper.BoardMapper">
+
+	<select id="selectByAll" resultType="com.heesun.blog.model.Board">
+		select * from board_base
+		where delete_flag = 0
+	</select>
+
+	<insert id="insert" parameterType="com.heesun.blog.model.Board">
+		insert into board_base
+		values('', #{post_title}, #{post_content}, getdate(), 1, #{category},
+		0)
+	</insert>
+
+	<update id="update" parameterType="com.heesun.blog.model.Board">
+		update board_base
+		set
+		post_title = #{post_title},
+		post_content = #{post_content}
+		where id =
+		#{id}
+	</update>
+
+	<update id="delete" parameterType="com.heesun.blog.model.Board">
+		update board_base
+		set
+		delete_flag = 1
+		where id = #{id}
+	</update>
+
+	<select id="selectList" parameterType="com.heesun.blog.model.Board"
+		resultType="java.util.HashMap">
+		select top 5 
+		post_id
+		,post_title
+		,convert(varchar,post_createdate, 120) as post_createdate
+		from
+		board_base
+		where post_id not in (
+		select top (5*#{pageNum}) post_id
+		from
+		board_base
+		where category
+		= #{category}
+		and delete_flag = 0
+		order by
+		post_id
+		desc)
+		and category = #{category}
+		and
+		delete_flag =
+		0
+		order by
+		id
+		desc
+	</select>
+
+	<resultMap id="ResMapPost" type="com.heesun.blog.model.Board">
+		<result property="id" column="id" />
+		<result property="post_title" column="post_title" />
+		<result property="post_content" column="post_content" />
+		<result property="post_create_date" column="post_create_date" />
+	</resultMap>
+
+	<select id="selectPost" parameterType="com.heesun.blog.model.Board"
+		resultType="com.heesun.blog.model.Board" resultMap="ResMapPost">
+		select post_id,
+		post_title,
+		post_content,
+		convert(varchar, post_createdate, 120) as
+		post_createdate
+		from board_base
+		where
+		delete_flag = 0
+		and post_id = #{id}
+		and
+		category = #{category}
+	</select>
+
+	<select id="selectByPostMaxId" parameterType="com.heesun.blog.model.Board"
+		resultType="int">
+		select isnull(max(id), 0) from board_base where category =
+		#{category}
+		and delete_flag = 0
+	</select>
+
+	<insert id="insertComment" parameterType="com.heesun.blog.model.Board">
+		insert into
+		board_comment
+		values(
+		#{comment_content}, getdate(), #{comment_parent}, 1,
+		#{board}, 0)
+	</insert>
+
+	<resultMap id="ResMapCmt" type="com.heesun.blog.model.Comment">
+		<result property="user" column="user" />
+		<result property="comment_content" column="comment_content" />
+		<result property="comment_create_date" column="comment_create_date" />
+	</resultMap>
+
+	<select id="selectCommentList" parameterType="com.heesun.blog.model.Board"
+		resultType="java.util.HashMap" resultMap="ResMapCmt">
+	WITH tree_query AS (
+	SELECT
+	id
+	, comment_content
+	, comment_create_date
+	, comment_parent
+	, [user]
+	, board
+	, delete_flag
+	, convert(varchar(255), id) sort
+	, comment_parent as depth
+	FROM board_comment
+	WHERE comment_parent = 0
+	UNION ALL
+	SELECT
+	B.id
+	, B.comment_content
+	, B.comment_create_date
+	, B.comment_parent
+	, B.[user]
+	, B.board
+	, B.delete_flag
+	, convert(varchar(255), convert(nvarchar,C.sort) + ' > ' +
+	convert(varchar(255), B.id)) sort
+	, (C.depth + 1) as depth
+	FROM board_comment B, tree_query C
+	WHERE B.comment_parent = C.id
+	)
+	select user_id
+	, b.id as id
+	, name
+	, comment_content
+	, convert(varchar, comment_create_date,120) as comment_create_date,
+	board
+	, comment_create_date
+	, comment_parent
+	, delete_flag
+	, b.depth
+	FROM [user] as a
+	INNER JOIN
+	tree_query as b
+	ON a.id = b.[user]
+	where board = #{board}
+	order by SORT
+	</select>
+
+	<select id="selectCategoryById" parameterType="com.heesun.blog.model.Board"
+		resultType="int">
+		select category from board_base where id = #{id};
+	</select>
+
+	<update id="deleteCmt" parameterType="com.heesun.blog.model.Comment">
+		update board_comment
+		set
+		delete_flag = 1
+		where id = #{id}
+	</update>
+
+	<update id="updateCmt" parameterType="com.heesun.blog.model.Comment">
+		update board_comment
+		set
+		comment_content = #{comment_content}
+		where id =
+		#{id}
+	</update>
+
+	<select id="pagingNumber" parameterType="com.heesun.blog.model.Board"
+		resultType="int">
+		  select CEILING (count(*)/5.0) as pageNo from board_base where category = #{category} and delete_flag = 0
+	</select>
+
+</mapper>

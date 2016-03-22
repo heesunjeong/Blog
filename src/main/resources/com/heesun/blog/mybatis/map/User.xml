@@ -1,0 +1,60 @@
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.heesun.blog.mapper.UserMapper">
+
+	<select id="selectById" parameterType="com.heesun.blog.model.User"	resultType="java.util.HashMap">
+		select *
+		from [user]
+		where user_id = #{user_id}
+	</select>
+
+	<select id="selectByName" parameterType="com.heesun.blog.model.User"
+		resultType="com.heesun.blog.model.User">
+		select *
+		from [user]
+		where name = #{name}
+	</select>
+
+	<select id="selectByAll" resultType="com.heesun.blog.model.User">
+		select * from [user]
+	</select>
+
+	<insert id="insert" parameterType="com.heesun.blog.model.User">
+		insert into [user]
+		values(#{user_id}, #{name}, #{password}, #{email}, #{birth},
+		'default')
+	</insert>
+
+	<update id="update" parameterType="com.heesun.blog.model.User">
+		update [user]
+		set password =
+		#{password},
+		email = #{email},
+		birth = #{birth}
+		where user_id =
+		#{user_id}
+	</update>
+
+	<update id="delete" parameterType="com.heesun.blog.model.User">
+		update [user]
+	</update>
+
+	<select id="selectLoginCheck" parameterType="com.heesun.blog.model.User"
+		resultType="java.util.HashMap">
+		select user_id, password
+		from [user]
+		where user_id =
+		#{user_id}
+	</select>
+	
+	
+	<select id="selectUserInfo" parameterType="com.heesun.blog.model.User"
+		resultType="com.heesun.blog.model.User">
+		select id, name, email, birth, is_admin
+		from [JHS_TEST].[dbo].[user]
+		where user_id = 'admin'
+  		and password = 'admin'	
+	</select>
+
+</mapper>

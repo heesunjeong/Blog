@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Join</title>
+
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="/blog/resources/UserController.js"></script>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="/blog/resources/BlogStyle.css">
+</head>
+<body>
+	<div align="center">
+
+		<div id="joinForm">
+			<h1>
+				<b>j o i n</b>
+			</h1>
+			<table style="text-align: right">
+				<tr>
+					<td>ID</td>
+					<td><input type="text" id="user_id" name="user_id" required><br>
+					<td><div id="idCheckAlert"></div></td>
+				</tr>
+				<tr>
+					<td>NAME</td>
+					<td><input type="text" id="name" name="name" required><br>
+				<tr>
+					<td>PASSWORD</td>
+					<td><input type="password" id="password" name="password"
+						required><br>
+				<tr>
+					<td>rePASSWORD</td>
+					<td><input type="password" id="repassword" name="repassword"
+						required><br>
+				<tr>
+					<td>E-MAIL</td>
+					<td><input type="email" id="email" name="email" required><br>
+				<tr>
+					<td>BIRTH</td>
+					<td><input type="date" id="birth" name="birth" required><br>
+			</table>
+
+			<br> <br> <input type="button" value="j o i n"
+				onclick="joinUser();"> <input type="button"
+				value="c a n c e l" onclick="joinCancel()">
+		</div>
+
+
+
+	</div>
+</body>
+</html>

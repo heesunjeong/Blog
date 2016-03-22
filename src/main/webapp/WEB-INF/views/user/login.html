@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Log in</title>
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="/blog/resources/UserController.js"></script>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="/blog/resources/BlogStyle.css">
+</head>
+<body>
+	<div id="loginForm" align="center">
+		<h1>
+			<b>l o g i n</b>
+		</h1>
+		<br> <br>
+		<form id="loginForm">
+			<table style="text-align: right">
+				<tr>
+					<td>ID</td>
+					<td><input type="text" id="user_id" name="user_id" required><br>
+				</tr>
+				<tr>
+					<td>PASSWORD</td>
+					<td><input type="password" id="password" name="passwrod" required><br>
+				</tr>
+			</table>
+		</form>
+		<br> <br> <input type="button" id="loginButton"
+			value="l o g i n" onclick="loginUser();"> <input
+			type="button" value="j o i n" id="joinButton"
+			onclick="self.location='/blog/user/join'">
+	</div>
+</body>
+</html>

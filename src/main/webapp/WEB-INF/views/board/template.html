@@ -1,0 +1,53 @@
+<!doctype html>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+<title>Welcome my Blog</title>
+
+<script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
+<script src="./resources/extjs/ext-jquery-adapter.js"></script>
+<script src="./resources/extjs/ext-all-debug.js"></script>
+<link rel="stylesheet"
+	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="/blog/resources/BlogStyle.css">
+<script src="./resources/UserController.js"></script>
+<script src="./resources/PostController.js"></script>
+<link rel="stylesheet"
+	href="./resources/extjs/css/ext-all.css">
+<script src="./resources/blogExt.js"></script>
+
+</head>
+<body>
+	<div id="header-el">
+		<input type="hidden" id="userInfo"> <a id="login"
+			href="./user/login">L O G I N</a> / <a id="join"
+			href="/blog/user/join">J O I N</a>
+	
+	<header id="">
+		<h1>My Blog</h1>
+
+	</header>
+	</div>
+
+	<nav id="nav-el">
+		- <a href="javascript:postLinkViewList(1)" id="categoryMenu">일기</a> <br>
+		- <a href="javascript:postLinkViewList(2)" id="categoryMenu">맛집</a><br>
+		- <a href="javascript:postLinkViewList(3)" id="categoryMenu">프로그래밍</a>
+	</nav>
+
+	<div id="content-el">
+		<div id="postBlog" class="blogBody"></div>
+		<div id="writeBlog" class="blogBody"></div>
+		<aside>
+			안녕하세요<br> <br> <input type="button" id="writeButton"
+				value="글쓰기">
+		</aside>
+	</div>
+
+	<footer id="footer-el">
+		<!-- Footer -->
+	</footer>
+
+</body>
+</html>
