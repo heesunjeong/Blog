@@ -24,9 +24,7 @@ public class BoardController {
 
 	@RequestMapping(value = "/writing")
 	public String writing() {
-
 		return "/board/writing.html";
-
 	}
 	
 	@RequestMapping(value = "/post")
@@ -34,9 +32,9 @@ public class BoardController {
 		return "/board/post.html";
 	}
 	
-	@RequestMapping(value = "/insert")
+	@RequestMapping(value = "/insertPost")
 	@ResponseBody
-	public void insert(@ModelAttribute Board board){
+	public void insertPost(@ModelAttribute Board board){
 		blogService.insert(board);
 	}
 	

@@ -10,8 +10,7 @@
 
 	<insert id="insert" parameterType="com.heesun.blog.model.Board">
 		insert into board_base
-		values('', #{post_title}, #{post_content}, getdate(), 1, #{category},
-		0)
+		values('', #{post_title}, #{post_content}, Getdate(), 1, #{category},	0)
 	</insert>
 
 	<update id="update" parameterType="com.heesun.blog.model.Board">
@@ -33,20 +32,20 @@
 	<select id="selectList" parameterType="com.heesun.blog.model.Board"
 		resultType="java.util.HashMap">
 		select top 5 
-		post_id
+		id
 		,post_title
-		,convert(varchar,post_createdate, 120) as post_createdate
+		,convert(varchar, post_create_date, 120) as post_create_date
 		from
 		board_base
-		where post_id not in (
-		select top (5*#{pageNum}) post_id
+		where id not in (
+		select top (5*#{pageNum}) id
 		from
 		board_base
 		where category
 		= #{category}
 		and delete_flag = 0
 		order by
-		post_id
+		id
 		desc)
 		and category = #{category}
 		and
@@ -66,22 +65,22 @@
 
 	<select id="selectPost" parameterType="com.heesun.blog.model.Board"
 		resultType="com.heesun.blog.model.Board" resultMap="ResMapPost">
-		select post_id,
+		select id,
 		post_title,
 		post_content,
-		convert(varchar, post_createdate, 120) as
-		post_createdate
+		convert(varchar, post_create_date, 120) as
+		post_create_date
 		from board_base
 		where
 		delete_flag = 0
-		and post_id = #{id}
+		and _bid = #{id}
 		and
 		category = #{category}
 	</select>
 
 	<select id="selectByPostMaxId" parameterType="com.heesun.blog.model.Board"
 		resultType="int">
-		select isnull(max(id), 0) from board_base where category =
+		select isnull(max(_bid), 0) from board_base where category =
 		#{category}
 		and delete_flag = 0
 	</select>

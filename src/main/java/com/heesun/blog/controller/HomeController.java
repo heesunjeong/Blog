@@ -46,7 +46,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/test")
 	public String test(Locale locale, Model model){
-		return "/board/extTest.html"; 
+		return "/board/template.html"; 
 	}
 	
 	@RequestMapping(value = "/loginUser")

@@ -1,3 +1,205 @@
-.cmtPageNumbers, .pageNumbers{
-	cursor : pointer;
+@CHARSET "EUC-KR";
+
+{
+margin: 0;
+padding: 0;
+}
+
+header, footer, aside, nav, article {
+	display: block;
+}
+
+body {
+	margin: 0 auto;
+	font-family: Arial, Helvettica, sans-serif;
+	background-color: #333333;
+}
+
+header {
+	width: 1000px;
+	background-color: black;
+	color: white;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+	overflow: hidden;
+}
+
+#header-menu {
+	width: 1000px;
+	color: white;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+	overflow: hidden;
+}
+
+div#header{
+	background-color: black;
+	color: white;
+}
+
+h1 {
+	font-size: 2em;
+	margin: 0;
+	padding: 0;
+	padding-top: 10px;
+}
+
+h2 {
+	font-size: 1.6;
+}
+
+h3 {
+	font-size: 1.3;
+}
+
+hgroup {
+	width: 70%;
+	float: left;
+}
+
+hgroup h1 {
+	padding-top: 0;
+	line-height: 1em;
+}
+
+hgroup h2 {
+	text-transform: uppercase;
+	font-size: 1.2em;
+	line-height: 1em;
+}
+
+nav {
+	width: 1000px;
+	background-color: #4e4e4e;
+	color: white;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+	overflow: hidden;
+}
+
+nav ul {
+	list-style-type: none;
+}
+
+nav li {
+	margin-right: 5px;
+}
+
+div#content {
+	display: table;
+	width: 1020px;
+	margin-right: auto;
+	margin-left: auto;
+	overflow: hidden;
+}
+
+p {
+	margin: 10px;
+}
+
+img {
+	float: right;
+	margin: 0px 0px 10px 10px;
+	box-shadow: 3px 3px 5px 1px #cccccc;
+}
+
+#content-el {
+	width: 1020px;
+	background-color: white;
+	color: black;
+	margin-right: auto;
+	margin-left: auto;
+	overflow: hidden;
+}
+
+#blog-body {
+	display: table-cell;
+	width: 800px;
+	background-color: white;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+}
+
+#side-menu {
+	display: table-cell;
+	width: 200px;
+	background-color: silver;
+	color: white;
+	margin-right: auto;
+	margin-left: auto;
+	font-size: .8em;
+	padding: 10px;
+}
+
+#writeBlog {
+	display: none;
+}
+
+/* #mainContent, #listContent{
+	width: 800px;
+	background-color: white;
+	margin-right: auto;
+	margin-left: auto;
+	padding: 10px;
+} */
+
+footer {
+	width: 1000px;
+	background-color: black;
+	color: white;
+	margin-right: auto;
+	margin-left: auto;
+	height: 50px;
+	padding: 10px;
+}
+
+div#userSession {
+	color: white;
+	font-size: small;
+	width: 1000px;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+a:link, a:visited{
+	color: white;
+	text-decoration: inherit
+}
+
+#blog-body a:link, a:visited{
+	color: black;
+	text-decoration: inherit
+}
+
+#joinRule {
+	color: red;
+	font-size: 8pt;
+}
+
+body {
+	font-family: Arial, Helvettica, sans-serif;
+	background-color: #333333;
+}
+
+div#joinForm {
+	background-color: white;
+	margin: 50px;
+	padding: 50px;
+}
+
+div#loginForm {
+	background-color: white;
+	margin: 50px;
+	padding: 50px;
+}
+#post_title{
+	font-size: h2;
+}
+
+#postTitleTd {
+	width: 500px
 }

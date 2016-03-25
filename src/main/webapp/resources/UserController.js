@@ -1,59 +1,105 @@
 var joinIsNull = true;
 var userSession = null;
 
-function checkId() {
-	//var id = Ext.getCmp("user_id").getValue();
-	console.log(id);
-	var url = "/blog/user/idCheck";
-	var data = {
-		user_id : id
-	};
-
-	// console.log(data);
-	var result = callAjax("GET", url, data);
-
-	if (result.result == 'error') {
-		alert("에러");
-	}
-	console.log(result);
-
-	var Regexp = /^[a-z][a-z0-9]*$/g;
-
-	if (Regexp.test(id)) {
-		if (!result) {
-			Ext.Msg.alert("사용할 수 없는 ID입니다.");
-		} else {
-			if ((id.length < 5) || (id.length > 20)) {
-				Ext.Msg.alert("사용할 수 없는 ID입니다.");
-			} else {
-				Ext.Msg.alert("사용가능한 ID입니다.");
-				joinIsNull = false;
+function callAjax(_url, _data) {
+	var res = null;
+	jQuery.ajax({
+		type : "GET",
+		url : _url,
+		data : _data,
+		async : false,
+		cache : false,
+		dataType : 'json',
+		success : function(data) {
+			res = data;
+		},
+		error : function(request, status, error) {
+			res = {
+				result : 'error'
 			}
 		}
-	} else {
-		Ext.Msg.alert("사용할 수 없는 ID입니다.");
-	}
+	})
+	return res;
 }
 
+function checkId() {
+	$("#joinForm #user_id").focusout(function() {
+		var id = $("#user_id");
+		var idVal = id.val();
+		var url = "/blog/user/idCheck";
+		var data = {
+			user_id : idVal
+		};
+		var result = callAjax(url, data);
+		if (result.result == 'error') {
+			alert("에러났어 관리자한테 문의");
+		}
+		console.log(result.result);
+		var checkAlert = $("#idCheckAlert");
+
+		var Regexp = /^[a-z][a-z0-9]*$/g;
+
+		if (Regexp.test(idVal)) {
+			if (result.result) {
+				checkAlert.html("사용할 수 없는 ID입니다.");
+				id.val("");
+			} else {
+				if ((idVal.length < 5) || (idVal.length > 20)) {
+					checkAlert.html("사용할 수 없는 ID입니다.");
+					id.val("");
+				} else {
+					checkAlert.html("사용가능한 ID입니다.");
+					joinIsNull = false;
+				}
+			}
+		} else {
+			checkAlert.html("사용할 수 없는 ID입니다.");
+			id.val("");
+		}
+	});
+}
 
 function addEventHandelr() {
+	checkId();
 }
 
 $(document).ready(function() {
 	addEventHandelr()
 })
 
-function checkName() {
-	var getName = Ext.getCmp("name").getValue();
-	var Regexp = /^[\uac00-\ud7a3]*$/g;
-	var nameResult = Regexp.test(getName);
+/*
+ * $(document).ready(function() { $("#user_id").focusout(function() {
+ * jQuery.ajax({ type : "GET", url : "/blog/user/idCheck", data : { "user_id" :
+ * $("#user_id").val() }, success : function(data) { var getId =
+ * $("#user_id").val(); var getIdLength = getId.length; var Regexp =
+ * /^[a-z][a-z0-9]*$/g;
+ * 
+ * console.log(data);
+ * 
+ * if (Regexp.test(getId)) { if (data) { $("#idCheckAlert").html("사용할 수 없는
+ * ID입니다."); $("#user_id").val(""); } else { if ((getIdLength < 5) ||
+ * (getIdLength > 20)) { $("#idCheckAlert").html("사용할 수 없는 ID입니다.");
+ * $("#user_id").val(""); } else { $("#idCheckAlert").html("사용가능한 ID입니다.");
+ * joinIsNull = false; } } } else { $("#idCheckAlert").html("사용할 수 없는 ID입니다.");
+ * $("#user_id").val(""); } }, error : function(request, status, error) {
+ * alert("code:" + request.status + "\n" + "error:" + error); } }) }); });
+ */
 
-	if (!nameResult) {
-		Ext.Msg.alert("이름을 다시 입력해주세요.");
-	} else {
-		joinIsNull = false;
-	}
-}
+$(document).ready(function() {
+	$("#joinForm #name").focusout(function() {
+		var getName = $("#name").val();
+		var Regexp = /^[\uac00-\ud7a3]*$/g;
+		var nameResult = Regexp.test(getName);
+
+		if (!nameResult) {
+			$("#nameCheckAlert").html("이름을 다시 입력해주세요.");
+			$("#name").val("");
+		} else {
+			$("#nameCheckAlert").html("");
+			joinIsNull = false;
+		}
+	})
+})
 
 $(document).ready(function() {
 	$("#joinForm #password").focusout(function() {
@@ -80,15 +126,19 @@ $(document)
 									})
 				})
 
-function checkRePassword(){
-	var pwdval = Ext.getCmp("password").getValue();
-	var repwdval = Ext.getCmp("repassword").getValue();
-	if (!(pwdval == repwdval)) {
-		Ext.Msg.alert("비밀번호를 다시 입력해주세요.");
-	} else {
-		joinIsNull = false;
-	}	
-}
+$(document).ready(function() {
+	$("#joinForm #repassword").focusout(function() {
+		var pwdval = $("#password").val();
+		var repwdval = $("#repassword").val();
+		if (!(pwdval == repwdval)) {
+			$("#pwdCheckAlert").html("비밀번호를 다시 입력해주세요.");
+			$("#password").val("");
+			$("#repassword").val("");
+		} else {
+			joinIsNull = false;
+		}
+	})
+})
 
 function joinUser() {
 
@@ -97,10 +147,11 @@ function joinUser() {
 			type : "POST",
 			url : "/blog/user/joinUser",
 			data : {
-				"user_id" : Ext.getCmp("user_id").getValue(),
-				"name" : Ext.getCmp("name").getValue(),
-				"password" : Ext.getCmp("password").getValue(),
-				"email" : Ext.getCmp("email").getValue()
+				"user_id" : $("#user_id").val(),
+				"name" : $("#name").val(),
+				"password" : $("#password").val(),
+				"email" : $("#email").val(),
+				"birth" : $("#birth").val()
 			},
 			success : function(data) {
 				{
@@ -122,25 +173,21 @@ function joinUser() {
 function loginUser() {
 	jQuery.ajax({
 		type : "GET",
-		url : "/blog/loginUser",
-		beforeSend : function(xmlHttpRequest) {
-			xmlHttpRequest.setRequestHeader("AJAX", "true"); // ajax 호출을
-																// header에 기록
-		},
+		url : "/blog/user/loginUser",
 		data : {
-			"user_id" : Ext.getCmp("user_id").getValue(),
-			"password" : Ext.getCmp("user_password").getValue()
+			"user_id" : $("#user_id").val(),
+			"password" : $("#password").val()
 		},
 		success : function(data) {
 			{
-				// console.log(getUserId);
-				if (data == null || data == "") {
-					Ext.Msg.alert("회원정보가 일치하지 않습니다. 다시 로그인해세요.");
+				console.log(data);
+				if (data == null || data =="") {
+					alert("회원정보가 일치하지 않습니다. 다시 로그인해주세요.")
 
 				} else {
-					Ext.Msg.alert("반갑습니다 :)");
-					win.close();
-
+					userSession = data[0];
+					$("#userInfo").val(userSession);
+					self.location = '/blog';
 				}
 
 			}
@@ -164,7 +211,7 @@ function getList(joinIsNull) {
 			var list = data;
 			var content = "";
 			for (var i = 0; i < list.length; i++) {
-				content += list[i].id + " ";
+				content += list[i]._uid + " ";
 				content += list[i].user_id + " ";
 				content += list[i].name + " ";
 				content += list[i].password + " ";
