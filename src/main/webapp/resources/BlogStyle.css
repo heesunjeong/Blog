@@ -203,3 +203,12 @@ div#loginForm {
 #postTitleTd {
 	width: 500px
 }
+
+#postTitle {
+	font-weight: bold;
+	font-size: 30px;
+}
+
+#postDate {
+	font-size: 12px;
+}
