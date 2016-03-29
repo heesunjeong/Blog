@@ -56,12 +56,17 @@ function postLinkUrl(category, id, pageNum) {
 	var panel = $("#current-post")
 
 	if (result.id != null) {
-		var contentTable = "<table><tr id='postTitle'></tr><tr id='postDate'></tr><tr id='postContent'></tr></table>";
+		var contentTable = "<table><tr id='postTitle'></tr>" 
+			+ "<tr><td id='postDate' /> <td id='postToolbar' /> </tr>" 
+			+ "<td id='postContent' /></table>";
 
 		panel.html(contentTable);
 
 		$("#postTitle").html(result.post_title);
 		$("#postDate").html("posted at " + result.post_create_date);
+		$("#postToolbar").html(
+				"<span id='edit-btn' class='ui-icon ui-icon-wrench' data-id='" + result.id + "' /> " +
+						"<span id='delete-btn' class='ui-icon ui-icon-trash' data-id='" + result.id + "' /> ")
 		$("#postContent").html(result.post_content);
 
 		/*
@@ -100,6 +105,7 @@ function viewList(category, pageNum) {
 		for (var i = 0; i < result.length; i++) {
 			list += "<tr><td align='left'>";
 			// id 문자열일때 에러
+			// Attribute네임 id -> data-XXX로 수정
 			list += "<a href='#' id='"+ result[i].id +"' onclick='return postLinkUrl(" + category + ", this.id);'>";
 			list += "- " + result[i].post_title
 					+ "</a></td> <td id='viewListDate'>";
@@ -119,8 +125,11 @@ function writePost() {
 	var post_title = $("#post_title").val();
 	var post_content = $("#post_content").val();
 	var url = "/blog/board/insertPost";
+	
+	var id = postMaxId(categoryId);
 
 	var data = {
+		id : id+1,
 		category : categoryId,
 		post_title : post_title,
 		post_content : post_content
@@ -169,19 +178,56 @@ function pagingNumber(category) {
 	})
 }
 
+function insertNewPost() {
+	$('#postBlog').hide();
+	$('#write-post-view').show();
+	
+	$("#category").val(1);
+	$("#post_title").val('');
+	$("#post_content").val('');
+
+	// 글쓰기 눌렀을 때 아무것도 없는 페이지만들기
+}
+
+//블로그 글 삭제버튼 눌렀을 때 confirm 확인 후 삭제
+function deletePost(id, category) {
+	var url = "./board/deletePost";
+	var data = {
+		id : idToBid(id)
+	};
+	if (confirm("정말로 삭제하시겠습니까?")) {
+		callAjax("GET", url, data);
+		url = "./board/selectCategoryById";
+		var res = callAjax("GET", url, data);
+		postLinkViewList(res, 0);
+		return;
+	} else {
+		return;
+	}
+
+}
+
 // 버튼에 대한 Evnethandler
 function addEventHandelr() {
 	$("#writeButton").click(function() {
-		$('#postBlog').hide();
-		$('#write-post-view').show();
-		
-		// hidden영역으로 현재 카테고리저장 후 글쓰기 버튼 클릭시 현재 카테고리 select의 value로 넘기기
-		// 글쓰기 눌렀을 때 아무것도 없는 페이지만들기
+		insertNewPost();
 	});
 
 	$("#writePostBtn").click(function() {
 		writePost();
 	});
+	
+	$("#delete-btn").click(function() {
+		deletePost(this.getAttribute('data-id'), 1);
+	})
+}
+
+function idToBid(id) {
+	if(typeof id != 'number') {
+		id = id.substring(1);
+	}
+	
+	return id;
 }
 
 $(document).ready(function() {

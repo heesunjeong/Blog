@@ -10,7 +10,7 @@
 
 	<insert id="insert" parameterType="com.heesun.blog.model.Board">
 		insert into board_base
-		values('', #{post_title}, #{post_content}, Getdate(), 1, #{category},	0)
+		values(CONCAT('P', #{id}), #{post_title}, #{post_content}, Getdate(), 1, #{category}, 0)
 	</insert>
 
 	<update id="update" parameterType="com.heesun.blog.model.Board">
@@ -26,24 +26,27 @@
 		update board_base
 		set
 		delete_flag = 1
-		where id = #{id}
+		where _bid = #{id}
 	</update>
 
 	<select id="selectList" parameterType="com.heesun.blog.model.Board"
 		resultType="java.util.HashMap">
-		select top 5 
+		select top 5
 		id
 		,post_title
-		,convert(varchar, post_create_date, 120) as post_create_date
+		,convert(varchar, post_create_date, 120) as
+		post_create_date
 		from
 		board_base
 		where id not in (
-		select top (5*#{pageNum}) id
+		select top
+		(5*#{pageNum}) id
 		from
 		board_base
 		where category
 		= #{category}
-		and delete_flag = 0
+		and
+		delete_flag = 0
 		order by
 		id
 		desc)
@@ -52,7 +55,7 @@
 		delete_flag =
 		0
 		order by
-		id
+		_bid
 		desc
 	</select>
 
@@ -80,7 +83,8 @@
 
 	<select id="selectByPostMaxId" parameterType="com.heesun.blog.model.Board"
 		resultType="int">
-		select isnull(max(_bid), 0) from board_base where category =
+		select isnull(max(_bid), 0) from board_base where category
+		=
 		#{category}
 		and delete_flag = 0
 	</select>
@@ -89,7 +93,8 @@
 		insert into
 		board_comment
 		values(
-		#{comment_content}, getdate(), #{comment_parent}, 1,
+		#{comment_content}, getdate(), #{comment_parent},
+		1,
 		#{board}, 0)
 	</insert>
 
@@ -101,55 +106,55 @@
 
 	<select id="selectCommentList" parameterType="com.heesun.blog.model.Board"
 		resultType="java.util.HashMap" resultMap="ResMapCmt">
-	WITH tree_query AS (
-	SELECT
-	id
-	, comment_content
-	, comment_create_date
-	, comment_parent
-	, [user]
-	, board
-	, delete_flag
-	, convert(varchar(255), id) sort
-	, comment_parent as depth
-	FROM board_comment
-	WHERE comment_parent = 0
-	UNION ALL
-	SELECT
-	B.id
-	, B.comment_content
-	, B.comment_create_date
-	, B.comment_parent
-	, B.[user]
-	, B.board
-	, B.delete_flag
-	, convert(varchar(255), convert(nvarchar,C.sort) + ' > ' +
-	convert(varchar(255), B.id)) sort
-	, (C.depth + 1) as depth
-	FROM board_comment B, tree_query C
-	WHERE B.comment_parent = C.id
-	)
-	select user_id
-	, b.id as id
-	, name
-	, comment_content
-	, convert(varchar, comment_create_date,120) as comment_create_date,
-	board
-	, comment_create_date
-	, comment_parent
-	, delete_flag
-	, b.depth
-	FROM [user] as a
-	INNER JOIN
-	tree_query as b
-	ON a.id = b.[user]
-	where board = #{board}
-	order by SORT
+		WITH tree_query AS (
+		SELECT
+		id
+		, comment_content
+		, comment_create_date
+		, comment_parent
+		, [user]
+		, board
+		, delete_flag
+		, convert(varchar(255), id) sort
+		, comment_parent as depth
+		FROM board_comment
+		WHERE comment_parent = 0
+		UNION ALL
+		SELECT
+		B.id
+		, B.comment_content
+		, B.comment_create_date
+		, B.comment_parent
+		, B.[user]
+		, B.board
+		, B.delete_flag
+		, convert(varchar(255), convert(nvarchar,C.sort) + ' > ' +
+		convert(varchar(255), B.id)) sort
+		, (C.depth + 1) as depth
+		FROM board_comment B, tree_query C
+		WHERE B.comment_parent = C.id
+		)
+		select user_id
+		, b.id as id
+		, name
+		, comment_content
+		, convert(varchar, comment_create_date,120) as comment_create_date,
+		board
+		, comment_create_date
+		, comment_parent
+		, delete_flag
+		, b.depth
+		FROM [user] as a
+		INNER JOIN
+		tree_query as b
+		ON a.id = b.[user]
+		where board = #{board}
+		order by SORT
 	</select>
 
 	<select id="selectCategoryById" parameterType="com.heesun.blog.model.Board"
 		resultType="int">
-		select category from board_base where id = #{id};
+		select category from board_base where _bid = #{id};
 	</select>
 
 	<update id="deleteCmt" parameterType="com.heesun.blog.model.Comment">
@@ -169,7 +174,8 @@
 
 	<select id="pagingNumber" parameterType="com.heesun.blog.model.Board"
 		resultType="int">
-		  select CEILING (count(*)/5.0) as pageNo from board_base where category = #{category} and delete_flag = 0
+		select CEILING (count(*)/5.0) as pageNo from board_base where category =
+		#{category} and delete_flag = 0
 	</select>
 
 </mapper>
