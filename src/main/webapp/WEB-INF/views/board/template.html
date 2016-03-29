@@ -22,15 +22,17 @@
 		</div>
 
 		<header>
-			<h1><i>Welcome! Heesun's Blog</i></h1>
+			<h1>
+				<i>Welcome! Heesun's Blog</i>
+			</h1>
 
 		</header>
 	</div>
 
 	<nav id="nav-el">
-		- <a href="javascript:postLinkViewList(1)" id="category-diary">일기</a> <br>
-		- <a href="javascript:postLinkViewList(2)" id="category-yam">맛집</a><br>
-		- <a href="javascript:postLinkViewList(3)" id="category-programming">프로그래밍</a>
+		- <a href="javascript:postLinkViewList(1, 0)" id="category-diary">일기</a>
+		<br> - <a href="javascript:postLinkViewList(2, 0)" id="category-yam">맛집</a><br>
+		- <a href="javascript:postLinkViewList(3, 0)" id="category-programming">프로그래밍</a>
 	</nav>
 
 	<div id="content-el">
@@ -40,8 +42,34 @@
 				<div id="comment-list"></div>
 				<div id="post-list"></div>
 			</div>
-			<div id="writeBlog" class="blogBody"></div>
+
+			<div id="write-post-view" class="blogBody" align="center">
+				<table style="text-align: right">
+					<tr>
+						<td>category</td>
+						<td><select id="category" style="width: 506px; height: 26px;">
+								<option value="1">일상</option>
+								<option value="2">맛집</option>
+								<option value="5">프로그래밍</option>
+						</select>
+					</tr>
+					<tr>
+						<td>title</td>
+						<td><input type="text" id="post_title" name="post_title"
+							style="width: 500px; height: 20px;" required><br></td>
+					</tr>
+					<tr>
+						<td>content</td>
+						<td><textarea id="post_content" name="post_content"
+								style="width: 500px; height: 600px;" required></textarea><br></td>
+					</tr>
+				</table>
+				<br> <br> <input type="button" id="writePostBtn"
+					value="글쓰기"> <input type="button" value="취소">
+			</div>
 		</div>
+
+
 
 		<aside id="side-menu">
 			안녕하세요 <br> <br> <input type="button" id="writeButton"

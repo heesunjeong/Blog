@@ -53,7 +53,7 @@ public class BoardController {
 	@RequestMapping(value = "/selectByPostMaxId")
 	@ResponseBody
 	public int selectByPostMaxId(@ModelAttribute Board board){
-		return blogService.selectByPostMaxId(board);
+		return (blogService.selectByPostMaxId(board));
 	}
 	
 	@RequestMapping(value = "/insertComment")

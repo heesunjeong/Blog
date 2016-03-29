@@ -64,7 +64,7 @@ function addEventHandelr() {
 }
 
 $(document).ready(function() {
-	addEventHandelr()
+	//addEventHandelr()
 })
 
 /*

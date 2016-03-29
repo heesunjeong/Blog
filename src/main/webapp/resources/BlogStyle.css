@@ -212,3 +212,12 @@ div#loginForm {
 #postDate {
 	font-size: 12px;
 }
+
+#current-post {
+	padding-bottom: 50px;
+}
+
+#postList {
+	font-weight: bold;
+	font-size: 18px;
+}
