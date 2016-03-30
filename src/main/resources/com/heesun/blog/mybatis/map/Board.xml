@@ -16,6 +16,7 @@
 	<update id="update" parameterType="com.heesun.blog.model.Board">
 		update board_base
 		set
+		category = #{category},
 		post_title = #{post_title},
 		post_content = #{post_content}
 		where id =
@@ -63,6 +64,7 @@
 		<result property="id" column="id" />
 		<result property="post_title" column="post_title" />
 		<result property="post_content" column="post_content" />
+		<result property="category" column="category" />
 		<result property="post_create_date" column="post_create_date" />
 	</resultMap>
 
@@ -71,14 +73,13 @@
 		select id,
 		post_title,
 		post_content,
+		category,
 		convert(varchar, post_create_date, 120) as
 		post_create_date
 		from board_base
 		where
 		delete_flag = 0
 		and _bid = #{id}
-		and
-		category = #{category}
 	</select>
 
 	<select id="selectByPostMaxId" parameterType="com.heesun.blog.model.Board"

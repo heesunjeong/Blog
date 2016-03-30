@@ -65,10 +65,18 @@ function postLinkUrl(category, id, pageNum) {
 		$("#postTitle").html(result.post_title);
 		$("#postDate").html("posted at " + result.post_create_date);
 		$("#postToolbar").html(
-				"<span id='edit-btn' class='ui-icon ui-icon-wrench' data-id='" + result.id + "' /> " +
-						"<span id='delete-btn' class='ui-icon ui-icon-trash' data-id='" + result.id + "' /> ")
+				"<span class='ui-icon ui-icon-wrench edit-post-btn' data-id='" + result.id + "' /> " +
+						"<span class='ui-icon ui-icon-trash delete-post-btn' data-id='" + result.id + "' /> ")
 		$("#postContent").html(result.post_content);
 
+		$(".edit-post-btn").click(function() {
+			changeEditorMode(this.getAttribute("data-id"));
+		})
+		
+		$(".delete-post-btn").click(function() {
+			deletePost(this.getAttribute('data-id'), 1);
+		})
+		
 		/*
 		 * postCommentArea(id); viewCommentList(id, 1);
 		 */
@@ -120,7 +128,7 @@ function viewList(category, pageNum) {
 	pagingNumber(category);
 }
 
-function writePost() {
+function writePost(mode) {
 	var categoryId = $("#category").val();
 	var post_title = $("#post_title").val();
 	var post_content = $("#post_content").val();
@@ -141,6 +149,20 @@ function writePost() {
 		var result = callAjax("GET", url, data);
 		postLinkViewList(categoryId, 0);
 	}
+}
+
+function editPost() {
+	var data = {
+			id : $("#postInfo").attr("data-id"),
+			category : $("#category").val(),
+			post_title : $("#post_title").val(),
+			post_content : $("#post_content").val()
+		};
+	
+	var url = "./board/updatePost";
+	callAjax("GET", url, data);
+	
+	postLinkViewList(data.category, 0);
 }
 
 function loadFirstPost() {
@@ -178,15 +200,32 @@ function pagingNumber(category) {
 	})
 }
 
-function insertNewPost() {
+function changeEditorMode(id) {
 	$('#postBlog').hide();
 	$('#write-post-view').show();
 	
-	$("#category").val(1);
-	$("#post_title").val('');
-	$("#post_content").val('');
-
-	// 글쓰기 눌렀을 때 아무것도 없는 페이지만들기
+	if(id === 'new') {
+		$("#category").val(1);
+		$("#post_title").val('');
+		$("#post_content").val('');
+		
+		$("#writePostBtn").show();
+		$("#editPostBtn").hide();
+		
+	} else {
+		var result = callAjax("GET", "./board/selectPost", {
+			id : idToBid(id)
+		})
+		
+		$("#postInfo").attr("data-id", id);
+		
+		$("#category").val(result.category);
+		$("#post_title").val(result.post_title);
+		$("#post_content").val(result.post_content);
+		
+		$("#writePostBtn").hide();
+		$("#editPostBtn").show();
+	}
 }
 
 //블로그 글 삭제버튼 눌렀을 때 confirm 확인 후 삭제
@@ -197,6 +236,7 @@ function deletePost(id, category) {
 	};
 	if (confirm("정말로 삭제하시겠습니까?")) {
 		callAjax("GET", url, data);
+		
 		url = "./board/selectCategoryById";
 		var res = callAjax("GET", url, data);
 		postLinkViewList(res, 0);
@@ -204,21 +244,20 @@ function deletePost(id, category) {
 	} else {
 		return;
 	}
-
 }
 
 // 버튼에 대한 Evnethandler
 function addEventHandelr() {
 	$("#writeButton").click(function() {
-		insertNewPost();
+		changeEditorMode(this.getAttribute("data-mode"));
 	});
 
 	$("#writePostBtn").click(function() {
 		writePost();
 	});
 	
-	$("#delete-btn").click(function() {
-		deletePost(this.getAttribute('data-id'), 1);
+	$("#editPostBtn").click(function() {
+		editPost();
 	})
 }
 

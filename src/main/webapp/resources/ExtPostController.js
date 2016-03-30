@@ -63,8 +63,7 @@ function viewList(category, pageNum) {
 function postLinkUrl(category, id, pageNum) {
 	var url = "/blog/board/selectPost";
 	var data = {
-		id : id,
-		category : category
+		id : id
 	}
 	var result = callAjax("GET", url, data);
 	

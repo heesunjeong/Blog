@@ -65,7 +65,9 @@
 					</tr>
 				</table>
 				<br> <br> <input type="button" id="writePostBtn"
-					value="글쓰기"> <input type="button" value="취소">
+					value="글쓰기"> <input type="button" id="editPostBtn"
+					value="수정"> <input type="button" value="취소">
+					<input id='postInfo' type='hidden' />
 			</div>
 		</div>
 
@@ -73,7 +75,7 @@
 
 		<aside id="side-menu">
 			안녕하세요 <br> <br> <input type="button" id="writeButton"
-				value="글쓰기">
+				value="글쓰기" data-mode="new">
 		</aside>
 	</div>
 
