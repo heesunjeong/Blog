@@ -1,3 +1,24 @@
+/**
+ * Author : Heesun Jeong
+ * 
+ * Description :
+ * 1. 함수 정보
+ * callAjax(type, url, data): jQuery.ajax호출 함수
+ * postLinkViewList(category, pageNum)
+ * postMaxId(any) : 
+ * postLink(any, any) : 
+ * postLinkUrl() : 포스트 목록에서 포스트 클릭 시 해당 포스트 불러오는 함수
+ * wiewList() : 포스트 목록 불러오는 함수
+ * wirtePost(): 새로운 포스트 작성 함수
+ * editPost() : 포스트 수정 함수
+ * loadFirstPost() : 선택 카테고리의 가장 최신 포스트를 불러오는 함수
+ * pagingNumber(category) : 포스트목록의 페이지 넘버 함수
+ * changeEditorMode(category) : 블로그 포스트와 에디터를 교차로 보여주는 함수
+ * deletePost(id, category) : 포스트 삭제 함수. category 매개변수 추후에 삭제
+ * addEventHandler() : event를 추가해주는 handler
+ * idToBid() : post_id를 bid로 변경해주는 함수 (예: P1 -> 1)
+ */
+
 function callAjax(_type, _url, _data) {
 	var res = null;
 	jQuery.ajax({
@@ -53,8 +74,10 @@ function postLinkUrl(category, id, pageNum) {
 	}
 	
 	var result = callAjax("GET", url, data);
+	$("#postInfo").attr("data-id", result.id);
+	$("#postInfo").attr("data-category", category);
+	
 	var panel = $("#current-post")
-
 	if (result.id != null) {
 		var contentTable = "<table><tr id='postTitle'></tr>" 
 			+ "<tr><td id='postDate' /> <td id='postToolbar' /> </tr>" 
@@ -128,7 +151,7 @@ function viewList(category, pageNum) {
 	pagingNumber(category);
 }
 
-function writePost(mode) {
+function writePost() {
 	var categoryId = $("#category").val();
 	var post_title = $("#post_title").val();
 	var post_content = $("#post_content").val();
@@ -153,7 +176,7 @@ function writePost(mode) {
 
 function editPost() {
 	var data = {
-			id : $("#postInfo").attr("data-id"),
+			id : $(".edit-post-btn").attr("data-id"),
 			category : $("#category").val(),
 			post_title : $("#post_title").val(),
 			post_content : $("#post_content").val()
@@ -187,7 +210,7 @@ function pagingNumber(category) {
 
 	var result = callAjax("GET", url, data);
 	pageNumStr += "<table><tr>";
-	for (i = 1; i < result + 1; i++) {
+	for (var i = 1; i < result + 1; i++) {
 		pageNumStr += "<td class='pageNumbers' name='" + i + "'>" + i + "</td>";
 	}
 	pageNumStr += "</table>";
@@ -205,7 +228,7 @@ function changeEditorMode(id) {
 	$('#write-post-view').show();
 	
 	if(id === 'new') {
-		$("#category").val(1);
+		$("#category").val($("#postInfo").attr("data-category"));
 		$("#post_title").val('');
 		$("#post_content").val('');
 		
@@ -216,8 +239,6 @@ function changeEditorMode(id) {
 		var result = callAjax("GET", "./board/selectPost", {
 			id : idToBid(id)
 		})
-		
-		$("#postInfo").attr("data-id", id);
 		
 		$("#category").val(result.category);
 		$("#post_title").val(result.post_title);

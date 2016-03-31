@@ -87,7 +87,7 @@
 		select isnull(max(_bid), 0) from board_base where category
 		=
 		#{category}
-		and delete_flag = 0
+		<!-- and delete_flag = 0 -->
 	</select>
 
 	<insert id="insertComment" parameterType="com.heesun.blog.model.Board">
