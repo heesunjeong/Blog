@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.heesun.blog.model.User;
+import com.heesun.blog.model.Users;
 import com.heesun.blog.service.BlogService;
 
 /**
@@ -27,20 +27,14 @@ public class UserController {
 
 	@RequestMapping(value = "/idCheck")
 	@ResponseBody
-	public boolean idCheck(@ModelAttribute User user) {
+	public boolean idCheck(@ModelAttribute Users user) {
 		boolean result = this.blogService.idCheck(user);
 		return result;
 	}
 
 	@RequestMapping(value = "/joinUser")
-	public void joinUser(@ModelAttribute User user) {
+	public void joinUser(@ModelAttribute Users user) {
 		this.blogService.joinUser(user);
-	}
-
-	@RequestMapping(value = "/login")
-	@ResponseBody
-	public User login(@ModelAttribute User user) {
-		return this.blogService.loginCheck(user);
 	}
 
 /*	@RequestMapping(value = "/loginUser")

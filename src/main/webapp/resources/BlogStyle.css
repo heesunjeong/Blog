@@ -221,3 +221,9 @@ div#loginForm {
 	font-weight: bold;
 	font-size: 18px;
 }
+
+#fail-warning {
+	color: red;
+	font-size: 18px;
+	font-weight: bold;
+}

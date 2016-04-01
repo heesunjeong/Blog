@@ -4,16 +4,14 @@ import java.util.List;
 
 import com.heesun.blog.model.Board;
 import com.heesun.blog.model.Comment;
-import com.heesun.blog.model.User;
+import com.heesun.blog.model.Users;
 
 public interface BlogService {
-	public List<User> userList();
+	public List<Users> userList();
 
-	public boolean idCheck(User user);
+	public boolean idCheck(Users user);
 
-	public void joinUser(User user);
-
-	public User loginCheck(User user);
+	public void joinUser(Users user);
 
 	public void insert(Board board);
 	

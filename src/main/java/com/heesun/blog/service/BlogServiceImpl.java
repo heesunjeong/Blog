@@ -14,7 +14,7 @@ import com.heesun.blog.mapper.BoardMapper;
 import com.heesun.blog.mapper.UserMapper;
 import com.heesun.blog.model.Board;
 import com.heesun.blog.model.Comment;
-import com.heesun.blog.model.User;
+import com.heesun.blog.model.Users;
 
 /**
  * Handles requests for the application home page.
@@ -28,14 +28,14 @@ public class BlogServiceImpl implements BlogService {
 	private BoardMapper boardMapper;
 
 	@Override
-	public List<User> userList() {
-		List<User> userList = userMapper.selectByAll();
+	public List<Users> userList() {
+		List<Users> userList = userMapper.selectByAll();
 		return userList;
 	}
 
 	@Override
-	public boolean idCheck(User user) {
-		User result = userMapper.selectById(user);
+	public boolean idCheck(Users user) {
+		Users result = userMapper.selectById(user);
 		Boolean getResult = false;
 		if (result != null) {
 			getResult = false;
@@ -48,18 +48,8 @@ public class BlogServiceImpl implements BlogService {
 	}
 
 	@Override
-	public void joinUser(User user) {
+	public void joinUser(Users user) {
 		userMapper.insert(user);
-	}
-
-	@Override
-	public User loginCheck(User user) {
-		User userInfo = userMapper.selectUserInfo(user);
-		
-		Collection<SimpleGrantedAuthority> roles = new ArrayList<SimpleGrantedAuthority>();
-		roles.add(new SimpleGrantedAuthority("ROLE_USER"));
-		
-		return userInfo;
 	}
 
 	@Override

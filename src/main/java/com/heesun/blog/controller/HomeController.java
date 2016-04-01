@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.heesun.blog.model.User;
+import com.heesun.blog.model.Users;
 import com.heesun.blog.service.BlogService;
 
 /**
@@ -28,7 +28,7 @@ public class HomeController {
 	@Autowired
 	private BlogService blogService;
 
-	@Secured({"ROLE_USER","ROLE_ADMIN"})
+	//@Secured({"ROLE_USER","ROLE_ADMIN"})
 	@RequestMapping(value = "/", method = { RequestMethod.GET,
 			RequestMethod.POST })
 	public String home(Locale locale, Model model) {
@@ -38,7 +38,7 @@ public class HomeController {
 
 	@RequestMapping(value = "/list")
 	@ResponseBody
-	public List<User> AjaxUserList(@ModelAttribute User user) {
+	public List<Users> AjaxUserList(@ModelAttribute Users user) {
 		return this.blogService.userList();
 	}
 	
@@ -61,7 +61,7 @@ public class HomeController {
 	
 	@RequestMapping(value = "/admin", method = RequestMethod.GET)
 	@ResponseBody
-	public  List<User> admin() {
+	public  List<Users> admin() {
 		return this.blogService.userList();
 	}
 

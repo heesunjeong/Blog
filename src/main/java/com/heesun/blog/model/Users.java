@@ -1,6 +1,6 @@
 package com.heesun.blog.model;
 
-public class User {
+public class Users {
 	private String id;
 	private String user_id;
 	private String name;

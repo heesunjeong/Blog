@@ -8,15 +8,26 @@
            http://www.springframework.org/schema/security/spring-security-4.0.xsd">
             
     <http auto-config='true' use-expressions="false">
-        <intercept-url pattern="/" access="ROLE_USER" />
-        
+      <intercept-url pattern="/login.do" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+        <intercept-url pattern="/login_duplicate" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+       <!--  <intercept-url pattern="/**" access="ROLE_USER" /> -->
+        <form-login login-page="/login"
+                    username-parameter="j_username"
+                    password-parameter="j_password"    
+                    login-processing-url="/loginProcess"
+                    default-target-url="/test"
+                    authentication-failure-url="/fail.do"
+                    always-use-default-target='true'
+                    />
+         <csrf disabled="true" />
+        <session-management>
+            <concurrency-control max-sessions="1" expired-url="/login_duplicate"/>
+        </session-management>
     </http>
-       
-    <beans:bean class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+        
+ 	<beans:bean id="LoginService" class="com.heesun.blog.service.LoginService" />
  	
 	<authentication-manager>
-	    <authentication-provider ref="customAuthenticationProvider"/>
+	    <authentication-provider user-service-ref="LoginService" />
 	</authentication-manager>	
-    
-    <beans:bean id="customAuthenticationProvider" class="com.heesun.blog.service.CustomAuthenticationProvider"/>
-    </beans:beans>
+</beans:beans>
