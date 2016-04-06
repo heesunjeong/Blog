@@ -83,6 +83,8 @@ Java, Spring Framework을 이용한 개인 블로그
 
 
 ### 기술 명세
+* 개발환경
+  * Eclipse Luna, JDK 1.7, Tomcat 7.0
 * Spring Framework(4.1.5)
 * MyBatis(3.2.2)
 * HTML5 / CSS3
