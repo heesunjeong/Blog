@@ -16,7 +16,7 @@
  * changeEditorMode(category) : 블로그 포스트와 에디터를 교차로 보여주는 함수
  * deletePost(id, category) : 포스트 삭제 함수. category 매개변수 추후에 삭제
  * addEventHandler() : event를 추가해주는 handler
- * idToBid() : post_id를 bid로 변경해주는 함수 (예: P1 -> 1)
+ * idToBid() : post_id를 bid로 변경해주는 함수 (예: P1 -> 1). 추후 삭제 예정.
  */
 
 function callAjax(_type, _url, _data) {
@@ -103,7 +103,8 @@ function postLinkUrl(category, id, pageNum) {
 		/*
 		 * postCommentArea(id); viewCommentList(id, 1);
 		 */
-		viewList(category, pageNum)
+		viewList(category, pageNum);
+		viewCommentList(id, pageNum);
 
 	} else {
 		panel.html("현재 카테고리에 작성된 글이 없습니다.");
@@ -125,7 +126,7 @@ function viewList(category, pageNum) {
 	var postList = $("#post-list");
 
 	var list = "";
-	list += "Post List<br>"
+	//list += "<h3>Post List</h3>"
 	list += "<table> <tr>";
 
 	if (result == null || result == "") {

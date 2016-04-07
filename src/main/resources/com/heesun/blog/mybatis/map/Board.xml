@@ -102,54 +102,54 @@
 	<resultMap id="ResMapCmt" type="com.heesun.blog.model.Comment">
 		<result property="user" column="user" />
 		<result property="comment_content" column="comment_content" />
-		<result property="comment_create_date" column="comment_create_date" />
+		<result property="comment_cratedate" column="comment_cratedate" />
 	</resultMap>
 
 	<select id="selectCommentList" parameterType="com.heesun.blog.model.Board"
 		resultType="java.util.HashMap" resultMap="ResMapCmt">
 		WITH tree_query AS (
 		SELECT
-		id
+		_mid
 		, comment_content
-		, comment_create_date
+		, comment_cratedate
 		, comment_parent
-		, [user]
-		, board
+		, user_type
+		, BOARD_TYPE
 		, delete_flag
-		, convert(varchar(255), id) sort
+		, convert(varchar(255), _mid) sort
 		, comment_parent as depth
 		FROM board_comment
 		WHERE comment_parent = 0
 		UNION ALL
 		SELECT
-		B.id
+		B._mid
 		, B.comment_content
-		, B.comment_create_date
+		, B.comment_cratedate
 		, B.comment_parent
-		, B.[user]
-		, B.board
+		, B.user_type
+		, B.BOARD_TYPE
 		, B.delete_flag
 		, convert(varchar(255), convert(nvarchar,C.sort) + ' > ' +
-		convert(varchar(255), B.id)) sort
+		convert(varchar(255), B._mid)) sort
 		, (C.depth + 1) as depth
 		FROM board_comment B, tree_query C
-		WHERE B.comment_parent = C.id
+		WHERE B.comment_parent = C._mid
 		)
 		select user_id
-		, b.id as id
+		, b._mid as id
 		, name
 		, comment_content
-		, convert(varchar, comment_create_date,120) as comment_create_date,
-		board
-		, comment_create_date
+		, convert(varchar, comment_cratedate,120) as comment_cratedate,
+		BOARD_TYPE
+		, comment_cratedate
 		, comment_parent
 		, delete_flag
 		, b.depth
 		FROM [user] as a
 		INNER JOIN
 		tree_query as b
-		ON a.id = b.[user]
-		where board = #{board}
+		ON a._uid = b.user_type
+		where BOARD_TYPE = #{board}
 		order by SORT
 	</select>
 

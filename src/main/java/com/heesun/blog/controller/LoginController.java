@@ -12,13 +12,11 @@ public class LoginController {
 	@RequestMapping(value="/login.do", method = RequestMethod.GET)
 	public String login(HttpSession session) {
 		return "/user/login.html";
-		
 	}
 	
 	@RequestMapping(value="/fail.do", method = RequestMethod.GET)
 	public String failLogin(HttpSession session) {
 		return "/user/login-fail.html";
-		
 	}
 
 }

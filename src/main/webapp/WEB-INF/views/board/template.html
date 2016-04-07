@@ -8,9 +8,10 @@
 <script src="http://code.jquery.com/jquery-1.11.2.min.js"></script>
 <link rel="stylesheet"
 	href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-<link rel="stylesheet" href="/blog/resources/BlogStyle.css">
+<link rel="stylesheet" href="/blog/resources/css/BlogStyle.css">
 <script src="./resources/UserController.js"></script>
 <script src="./resources/PostController.js"></script>
+<script src="./resources/CommentController.js"></script>
 
 </head>
 <body>
@@ -39,9 +40,12 @@
 	<div id="content-el">
 		<div id="blog-body">
 			<div id="postBlog" class="blogBody">
-				<div id="current-post"></div>
-				<div id="comment-list"></div>
 				<div id="post-list"></div>
+				<div id="current-post"></div>
+				<div id="comment-list">
+					<div id="comment-view"></div>
+					<div id="comment-write"></div>
+				</div>
 			</div>
 
 			<div id="write-post-view" class="blogBody" align="center">
