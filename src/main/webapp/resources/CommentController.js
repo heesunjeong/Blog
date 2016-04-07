@@ -72,8 +72,10 @@ function viewCommentList(id, pageNum) {
 			})
 		}
 	}
-	commentWrite
-			.html('<textarea cols="50" rows="2" id="commentTextArea" maxlength="6000"></textarea><input type="button" value="댓글작성" />');
+	
+	var comment = '<textarea cols="50" rows="2" id="commentTextArea" maxlength="6000">'
+			+ '</textarea><input type="button" value="댓글작성" />';
+	commentWrite.html(comment);
 	commentList.html(list);
 }
 
