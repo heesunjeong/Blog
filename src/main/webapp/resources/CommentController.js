@@ -20,63 +20,65 @@ function viewCommentList(id, pageNum) {
 	} else {
 		list += 	"<table>";
 		for (var i = 0; i < result.length; i++) {
-			list += "<tr>"+
-				"<td id='commentWriterArea_" + result[i].id + "' align='left' width='500px'>"+ viewCmtDepth(result[i].depth) + result[i].name + "</td>" +
-				"<td id='commentDateArea_"+ result[i].id + "' align='left'>" +result[i].comment_create_date +"</td>"+
-				"<td id='commentControlArea_" + result[i].id + "'>" + "<div class='cmtCtrlDiv' id='cmtCtrlArea_"+ result[i].id +"'></div></td>"+
-			"</tr>"+
-			"<tr>" +
-				"<td id='commentContentArea_" + result[i].id + "' colspan='2' rowspan='1' align='left'><font color='white'>" + viewCmtDepth(result[i].depth) + "</font>";
-				if(result[i].delete_flag == 0 ){
-					list += result[i].comment_content;
-					}
-				else{
-					list += "삭제된 댓글입니다.";
-				}
-				list += "</td>"+
-			"</tr>"
+			list += "<tr>" + "<td id='commentWriterArea_"
+					+ result[i].id
+					+ "' align='left' width='500px'>"
+					+ viewCmtDepth(result[i].depth)
+					+ result[i].name
+					+ "</td>"
+					+ "<td id='commentDateArea_"
+					+ result[i].id
+					+ "' align='left'>"
+					+ result[i].comment_create_date
+					+ "</td>"
+					+ "<td id='commentControlArea_"
+					+ result[i].id
+					+ "'>"
+					+ "<div class='cmtCtrlDiv' id='cmtCtrlArea_"
+					+ result[i].id
+					+ "'>" + makeControlArea(result) +"</div></td>"
+					+ "</tr>"
+					+ "<tr>"
+					+ "<td id='commentContentArea_"
+					+ result[i].id
+					+ "' colspan='2' rowspan='1' align='left'><font color='white'>"
+					+ viewCmtDepth(result[i].depth) + "</font>";
+			if (result[i].delete_flag == 0) {
+				list += result[i].comment_content;
+			} else {
+				list += "삭제된 댓글입니다.";
+			}
+			list += "</td>" + "</tr>"
 		}
 		list += "<tr>" +
 					"<td colspan='3' rowspan='1'><div id='commentListPaging' align='center'></div></td>"+
 				"</tr>"+
 			"</table>";
 		
-		commentList.update(list);
-		cmtPagingNumber(id);
 		
-		for(var i=0; i < result.length; i++){
-			new Ext.Panel({
-				renderTo: "cmtCtrlArea_" + result[i].id,
-				xtype : 'panel',
-				layout : 'column',
-				hideBorders : true,
-				buttons : [{ 
-					text : '댓글',
-					name : result[i].id,
-					handler : function(){
-						updateCoComent(btnCheck(this.name, result))
-					}
-				},{
-					name : result[i].id,
-					text : '수정',
-					handler : function(){
-						updateComment(btnCheck(this.name, result));
-					}
-				}, {
-					name : result[i].id,
-					text : '삭제',
-					handler : function(){
-						deleteComment(btnCheck(this.name, result));
-					}
-				} ]
-			})
-		}
+		
+
 	}
 	
 	var comment = '<textarea cols="50" rows="2" id="commentTextArea" maxlength="6000">'
-			+ '</textarea><input type="button" value="댓글작성" />';
+			+ '</textarea><input type="button" id="insertCmtBtn" value="댓글작성" data-board="'+ id +'" />';
 	commentWrite.html(comment);
 	commentList.html(list);
+	cmtPagingNumber(id);
+}
+
+function makeControlArea(result) {
+	if(result.delete_flag == 0) {
+		for(var i=0; i < result.length; i++){
+			return html = "<table>" +
+					"<tr> " +
+					"<td><span class='ui-icon ui-icon-wrench cmt-edit-post-btn' data-id='" + result[i].id + "' /></td>" +
+					"<td><span class='ui-icon ui-icon-trash cmt-delete-post-btn' data-id='" + result[i].id + "' /></td>" +
+					"<td><span class='ui-icon ui-icon-comment cmt-reply-post-btn' data-id='" + result[i].id + "' /></td>" +
+					"</tr></table>"
+		}
+	}
+	return "";
 }
 
 function viewCmtDepth(data) {
@@ -101,24 +103,23 @@ function btnCheck(name, result){
 }
 
 // 코멘트 작성
-function writeComment(id) {
-	var commentContent = Ext.getCmp("commentInTextarea");
+function writeComment(postId) {
+	var commentContent = $("#commentTextArea");
 
 	var url = "/blog/board/insertComment";
 
 	var data = {
-		comment_content : commentContent.getValue(),
+		comment_content : commentContent.val(),
 		comment_parent : 0,
 		user : 1,
-		board : id
-	}
-	if (commentContent.getValue() == null || commentContent.getValue() == "") {
-		alert("내용을 입력해주세요!")
+		board : postId
+	};
+	if (commentContent.val() == null || commentContent.val() == "") {
+		alert("내용을 입력해주세요!");
 	} else {
-		callAjax("POST", url, data);
-		alert("댓글작성이 완료되었습니다.")
-		commentContent.setValue("");
-		viewCommentList(id);
+		callAjax("GET", url, data);
+		commentContent.val("");
+		viewCommentList(postId);
 	}
 }
 
@@ -163,29 +164,27 @@ function updateCoComent(result) {
 }
 
 // 코멘드 삭제
-function deleteComment(data) {
-	var dataId = data.id;
-	var dataBoard = data.board;
-		var url = "./board/deleteCmt";
-		var data = {
-			id : dataId
-		};
-		if (confirm("Are you sure you want to do this?")) {
-			callAjax("GET", url, data);
-			viewCommentList(dataBoard);
-			return;
-		} else {
-			return;
-		}
+function deleteComment(cmtId) {
+	var url = "./board/deleteCmt";
+	var postId = $("#postInfo").attr("data-id");
+	
+	var data = {
+		id : cmtId
+	};
+	if (confirm("Are you sure you want to do this?")) {
+		callAjax("GET", url, data);
+		viewCommentList(postId.substring(1));
+		return;
+	} else {
+		return;
+	}
 }
 
 // 코멘트 수정
-function updateComment(data) {
+function updateComment(cmtId) {
 	var dataId = data.id;
 	var dataBoard = data.board;
-	
-	
-	
+
 	$("#commentContentArea_"+dataId).html("");
 	
 	new Ext.Panel({
@@ -233,20 +232,41 @@ function cmtPagingNumber(id) {
 	var pageNumStr = "";
 
 	var result = callAjax("GET", url, data);
-	pageNumStr += "<table><tr>";
-	for (i = 1; i < result + 1; i++) {
-		pageNumStr += "<td class='cmtPageNumbers' name='" + i + "'>" + i + "</td>";
+	
+	if(result) {
+		pageNumStr += "<table><tr>";
+		for (i = 1; i < result + 1; i++) {
+			pageNumStr += "<td class='cmtPageNumbers' name='" + i + "'>" + i + "</td>";
+		}
+		pageNumStr += "</table>";
+
+		$("#commentListPaging").html(pageNumStr);
+
+		$(".cmtPageNumbers").click(function() {
+			var pageId = $(this).attr("name");
+			viewCommentList(id, pageId - 1);
+		})
 	}
-	pageNumStr += "</table>";
+}
 
-	$("#commentListPaging").html(pageNumStr);
-
-	$(".cmtPageNumbers").click(function() {
-		var pageId = $(this).attr("name");
-		viewCommentList(id, pageId - 1);
+function addCmtEventHandler() {
+	$("#insertCmtBtn").click(function() {
+		writeComment(this.getAttribute('data-board'));
+	})
+	
+	$(".cmt-edit-post-btn").click(function() {
+		updateComment(this.getAttribute('data-id'));
+	})
+	
+	$(".cmt-delete-post-btn").click(function() {
+		deleteComment(this.getAttribute('data-id'));
+	})
+	
+	$(".cmt-reply-post-btn").click(function() {
+		updateCoComent(this.getAttribute('data-id'));
 	})
 }
 
 $(document).ready(function() {
-	addEventHandelr();
+	addCmtEventHandler();
 })

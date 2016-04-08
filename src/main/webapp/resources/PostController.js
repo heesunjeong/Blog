@@ -269,7 +269,7 @@ function deletePost(id, category) {
 }
 
 // 버튼에 대한 Evnethandler
-function addEventHandelr() {
+function addEventHandler() {
 	$("#writeButton").click(function() {
 		changeEditorMode(this.getAttribute("data-mode"));
 	});
@@ -293,5 +293,5 @@ function idToBid(id) {
 
 $(document).ready(function() {
 	postLinkViewList(1, 0);
-	addEventHandelr();
+	addEventHandler();
 })

@@ -4,7 +4,7 @@ public class Comment {
 	private String user;
 	private String board;
 	private String comment_content;
-	private String comment_create_date;
+	private String comment_createdate;
 	private String user_id;
 	private String name;
 	private String id;
@@ -45,10 +45,10 @@ public class Comment {
 		this.name = name;
 	}
 	public String getComment_create_date() {
-		return comment_create_date;
+		return comment_createdate;
 	}
-	public void setComment_create_date(String comment_create_date) {
-		this.comment_create_date = comment_create_date;
+	public void setComment_create_date(String comment_createdate) {
+		this.comment_createdate = comment_createdate;
 	}
 	public String getUser() {
 		return user;

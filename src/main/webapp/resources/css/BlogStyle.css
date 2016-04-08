@@ -227,3 +227,8 @@ div#loginForm {
 	font-size: 18px;
 	font-weight: bold;
 }
+
+#commentTextArea {
+	width: 700px;
+	height: 70px;
+}
