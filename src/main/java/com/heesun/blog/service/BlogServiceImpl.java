@@ -1,13 +1,9 @@
 package com.heesun.blog.service;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import com.heesun.blog.mapper.BoardMapper;
@@ -74,6 +70,9 @@ public class BlogServiceImpl implements BlogService {
 
 	@Override
 	public void insertComment(Comment cmt) {
+		if (cmt.getId() == null) {
+			cmt.setId("0");
+		}
 		boardMapper.insertComment(cmt);
 
 	}
@@ -119,4 +118,8 @@ public class BlogServiceImpl implements BlogService {
 		return boardMapper.cmtPagingNumber(cmt);
 	}
 
+	@Override
+	public int selectByCmtMaxId(Comment cmt) {
+		return boardMapper.cmtPagingNumber(cmt);
+	}
 }

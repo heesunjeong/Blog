@@ -38,5 +38,7 @@ public interface BlogService {
 	public int pagingNumber(Board board);
 	
 	public int cmtPagingNumber(Comment cmt);
+	
+	public int selectByCmtMaxId(Comment cmt);
 
 }

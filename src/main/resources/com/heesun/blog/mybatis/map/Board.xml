@@ -183,5 +183,12 @@
 		select CEILING (count(*)/5.0) as pageNo from board_comment where board_type =
 		#{board} and delete_flag = 0
 	</select>
+	
+	<select id="selectByCmtMaxId" parameterType="com.heesun.blog.model.Comment"
+		resultType="int">
+		select isnull(max(_mid), 0) from board_comment where board_type =
+		#{board}
+		<!-- and delete_flag = 0 -->
+	</select>
 
 </mapper>

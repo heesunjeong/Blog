@@ -25,5 +25,7 @@ public interface BoardMapper extends BaseMapper<Board> {
 	int pagingNumber(Board board);
 	
 	int cmtPagingNumber(Comment cmt);
+	
+	int selectByCmtMaxId(Comment cmt);
 
 }

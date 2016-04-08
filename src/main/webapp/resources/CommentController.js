@@ -54,10 +54,6 @@ function viewCommentList(id, pageNum) {
 					"<td colspan='3' rowspan='1'><div id='commentListPaging' align='center'></div></td>"+
 				"</tr>"+
 			"</table>";
-		
-		
-		
-
 	}
 	
 	var comment = '<textarea cols="50" rows="2" id="commentTextArea" maxlength="6000">'
@@ -68,13 +64,16 @@ function viewCommentList(id, pageNum) {
 }
 
 function makeControlArea(result) {
-	if(result.delete_flag == 0) {
+	if(result[0].delete_flag === "0") {
 		for(var i=0; i < result.length; i++){
 			return html = "<table>" +
 					"<tr> " +
-					"<td><span class='ui-icon ui-icon-wrench cmt-edit-post-btn' data-id='" + result[i].id + "' /></td>" +
-					"<td><span class='ui-icon ui-icon-trash cmt-delete-post-btn' data-id='" + result[i].id + "' /></td>" +
-					"<td><span class='ui-icon ui-icon-comment cmt-reply-post-btn' data-id='" + result[i].id + "' /></td>" +
+					"<td><span class='ui-icon ui-icon-wrench cmt-edit-post-btn' data-id='" 
+					+ result[i].id + "' /></td>" +
+					"<td><span class='ui-icon ui-icon-trash cmt-delete-post-btn' data-id='" 
+					+ result[i].id + "' /></td>" +
+					"<td><span class='ui-icon ui-icon-comment cmt-reply-post-btn' data-id='" 
+					+ result[i].id + "' /></td>" +
 					"</tr></table>"
 		}
 	}
@@ -180,46 +179,28 @@ function deleteComment(cmtId) {
 	}
 }
 
-// 코멘트 수정
-function updateComment(cmtId) {
-	var dataId = data.id;
-	var dataBoard = data.board;
-
-	$("#commentContentArea_"+dataId).html("");
+// 코멘트 수정 버튼 클릭
+function onUpdateCmt(cmtId) {
+	var renderArea = $("#commentContentArea_"+cmtId);
 	
-	new Ext.Panel({
-		renderTo : 'commentContentArea_' + dataId,
-		xtype : 'panel',
-		hideBorders : true,
-		items : [{
-			xtype : 'textarea',
-			id : 'editCmtArea'+dataId,
-			hideBorders : true,
-			value : data.comment_content,
-		},{
-			xtype : 'panel',
-			layout : 'vbox',
-			hideBorders : true,
-			buttons : [ {
-				text : '수정',
-				id : 'checkLoginButton',
-				handler : function (){
-					var url = "/blog/board/updateCmt";
-					var data = {
-						id : dataId,
-						comment_content : Ext.getCmp("editCmtArea"+dataId).getValue(),
-					}
-					callAjax("GET", url, data);
-					viewCommentList(dataBoard);
-					}
-				}, {
-				text : '취소',
-				handler : function() {
-					
-				}
-			} ],
-		}]
-	})
+	var editComment = '<textarea cols="50" rows="2" id="editCmtTextArea_' + cmtId + '" maxlength="6000">'
+		+ '</textarea><input type="button" class="editCmtBtn" value="댓글수정" data-id="'+ cmtId +'" />';
+	
+	renderArea.html(editComment);
+	
+	$(".editCmtBtn"). click(function() {
+		updateComment(this.getAttribute('data-id'));
+	});
+}
+
+function updateComment(cmtId) {
+	var url = "/blog/board/updateCmt";
+	var data = {
+		id : cmtId,
+		comment_content : $("#editCmtTextArea_" + cmtId).val()
+	}
+	callAjax("GET", url, data);
+	viewCommentList(dataBoard);
 }
 
 //코멘트 페이징처리
@@ -252,19 +233,19 @@ function cmtPagingNumber(id) {
 function addCmtEventHandler() {
 	$("#insertCmtBtn").click(function() {
 		writeComment(this.getAttribute('data-board'));
-	})
+	});
 	
 	$(".cmt-edit-post-btn").click(function() {
-		updateComment(this.getAttribute('data-id'));
-	})
+		onUpdateCmt(this.getAttribute('data-id'));
+	});
 	
 	$(".cmt-delete-post-btn").click(function() {
 		deleteComment(this.getAttribute('data-id'));
-	})
+	});
 	
 	$(".cmt-reply-post-btn").click(function() {
 		updateCoComent(this.getAttribute('data-id'));
-	})
+	});
 }
 
 $(document).ready(function() {
